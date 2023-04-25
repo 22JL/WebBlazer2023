@@ -1,4 +1,5 @@
-﻿namespace Entidades
+﻿namespace Modelos
+
 {
     public class Login
     {
@@ -11,8 +12,8 @@
 
         public Login(string codigoUsuario, string contraseña)
         {
-            CodigoUsuario=codigoUsuario;
-            Contraseña=contraseña;
+            CodigoUsuario = codigoUsuario;
+            Contraseña = contraseña;
         }
     }
 }

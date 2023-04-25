@@ -25,7 +25,7 @@ namespace Datos.Repositorios
             {
                 using MySqlConnection _conexion = Conexion();
                 await _conexion.OpenAsync();
-                string sql = @"UPDATE Usuarios SET Nombre = @Nombre,  Contrasena = @Contrasena, Correo = @Correo, Rol =@Rol, Foto = @Foto, EstadoActivo = @EstadoActivo 
+                string sql = @"UPDATE usuarios SET Nombre = @Nombre,  Contrasena = @Contrasena, Correo = @Correo, Rol =@Rol, Foto = @Foto, EstadoActivo = @EstadoActivo 
                                WHERE CodigoUsuario = @CodigoUsuario;";
                 resultado = Convert.ToBoolean(await _conexion.ExecuteAsync(sql, usuario));
             }
@@ -44,7 +44,7 @@ namespace Datos.Repositorios
             {
                 using MySqlConnection _conexion = Conexion();
                 await _conexion.OpenAsync();
-                string sql = @" DELETE FROM Usuarios WHERE CodigoUsuario = @CodigoUsuario;";
+                string sql = @"DELETE FROM usuarios WHERE CodigoUsuario = @CodigoUsuario;";
                 resultado = Convert.ToBoolean(await _conexion.ExecuteAsync(sql, new { codigo }));
             }
             catch (Exception)
@@ -53,19 +53,53 @@ namespace Datos.Repositorios
             return resultado;
         }
 
-        public Task<IEnumerable<Usuario>> GetListaAsync()
+        public async Task<IEnumerable<Usuario>> GetListaAsync()
         {
-            throw new NotImplementedException();
+            IEnumerable<Usuario> lista = new List<Usuario>();
+            try
+            {
+                using MySqlConnection _conexion = Conexion();
+                await _conexion.OpenAsync();
+                string sql = @"SELECT * FROM usuarios;";
+                lista = await _conexion.QueryAsync<Usuario>(sql);
+            }
+            catch (Exception)
+            {
+            }
+            return lista;
         }
 
-        public Task<Usuario> GetPorCodigoAsync(string codigo)
+        public async Task<Usuario> GetPorCodigoAsync(string codigo)
         {
-            throw new NotImplementedException();
+            Usuario user = new Usuario();
+            try
+            {
+                using MySqlConnection _conexion = Conexion();
+                await _conexion.OpenAsync();
+                string sql = @"SELECT * FROM usuarios WHERE CodigoUsuario = @CodigoUsuario;";
+                user = await _conexion.QueryFirstAsync<Usuario>(sql, new { codigo });
+            }
+            catch (Exception)
+            {
+            }
+            return user;
         }
 
-        public Task<bool> NuevoAsync(Usuario usuario)
+        public async Task<bool> NuevoAsync(Usuario usuario)
         {
-            throw new NotImplementedException();
+            bool resultado = false;
+            try
+            {
+                using MySqlConnection _conexion = Conexion();
+                await _conexion.OpenAsync();
+                string sql = @"INSERT INTO usuarios (CodigoUsuario,Nombre, contrasena, Correo, Rol, Foto,FechaCreacion,EstadoActivo)
+                                VALUES (@CodigoUsuario,@Nombre, @contrasena, @Correo, @Rol, @Foto, @FechaCreacion, @EstadoActivo);";
+                resultado = Convert.ToBoolean(await _conexion.ExecuteAsync(sql, usuario));
+            }
+            catch (Exception)
+            {
+            }
+            return resultado;
         }
     }
 }

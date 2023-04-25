@@ -1,4 +1,5 @@
-﻿using Entidades;
+﻿
+using Modelos;
 
 namespace Datos.Interfaces
 {
